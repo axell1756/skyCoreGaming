@@ -5,6 +5,7 @@ import static spark.Spark.*;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,19 +14,24 @@ import com.cg.Constructors.RandomValues;
 
 public class Main {
 
-	static RandomValues<Integer> randomValues = new RandomValues<Integer>();
+	static RandomValues<Integer> tableValues = new RandomValues<Integer>();
+	static String[][] spinValues = new String[3][3];
+	static Random rand = new Random();
 
 	public static void main(String[] args) {
-		randomValues.add(0.4, 0).add(0.3, 1).add(0.2, 2).add(0.1, 3);
+		// Represents required Table task's values
+		tableValues.add(0.4, 0).add(0.3, 1).add(0.2, 2).add(0.1, 3);
 		serve();
 	}
 
 	public static void serve() {
 
 		Gson GSON = new Gson();
-		Type type = new TypeToken<Map<String, String>>() {}.getType();
+		Type type = new TypeToken<Map<String, String>>() {
+		}.getType();
 
 		Map<String, String> responseBody = new HashMap<String, String>();
+		Map<String, String[][]> spinBody = new HashMap<String, String[][]>();
 
 		port(8008);
 		post("/serve", (req, res) -> {
@@ -33,7 +39,7 @@ public class Main {
 			case "Hello":
 				return hello();
 			case "Table":
-				return randomValues.next();
+				return tableValues.next();
 			default:
 				return "Error! No or invalid request name specified! (" + req.body() + ")";
 			}
@@ -46,15 +52,19 @@ public class Main {
 			switch (requestBody.get("request")) {
 
 			case "Hello":
-				
+
 				responseBody.put("response", hello());
 				return GSON.toJson(responseBody);
 
 			case "Table":
 
-				responseBody.put("response", Integer.toString(randomValues.next()));
+				responseBody.put("response", Integer.toString(tableValues.next()));
 				return GSON.toJson(responseBody);
 
+			case "Spin":
+				spin();
+				spinBody.put("response", spinValues);
+				return GSON.toJson(spinBody);
 			default:
 				responseBody.put("response", "Wrong request");
 				return GSON.toJson(responseBody);
@@ -64,6 +74,30 @@ public class Main {
 
 	public static String hello() {
 		return "Hello stranger!";
+	}
+
+	public static void spin() {
+		int symbolValue;
+		for (int i = 0; i <= 2; i++) {
+			for (int j = 0; j <= 2; j++) {
+				symbolValue = rand.nextInt(4);
+				System.out.println(symbolValue);
+				switch (symbolValue) {
+				case 0:
+					spinValues[i][j] = "ACE";
+					break;
+				case 1:
+					spinValues[i][j] = "KING";
+					break;
+				case 2:
+					spinValues[i][j] = "QUEEN";
+					break;
+				case 3:
+					spinValues[i][j] = "JACK";
+					break;
+				}
+			}
+		}
 	}
 
 }
