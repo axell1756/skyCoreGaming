@@ -8,14 +8,18 @@ import java.util.Map;
 import java.util.Random;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.cg.Constructors.RandomValues;
 
 public class Main {
 
+	// Initiation of RandomValues class for Table's task weighted probability
 	static RandomValues<Integer> tableValues = new RandomValues<Integer>();
+
+	// Initiation of 3x3 matrix for Spin task
 	static String[][] spinValues = new String[3][3];
+
+	// Is used in spin() method
 	static Random rand = new Random();
 
 	public static void main(String[] args) {
@@ -76,6 +80,10 @@ public class Main {
 		return "Hello stranger!";
 	}
 
+	/**
+	 * Spin task implementation. It is traversing 3x3 matrix and depending on which
+	 * value has been rolled by Random, picks a symbol for slot.
+	 */
 	public static void spin() {
 		int symbolValue;
 		for (int i = 0; i <= 2; i++) {

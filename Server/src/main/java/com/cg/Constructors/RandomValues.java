@@ -9,8 +9,7 @@ import java.util.TreeMap;
  * 
  * @author Peter
  *         Lawrey @https://stackoverflow.com/questions/6409652/random-weighted-selection-in-java/30362366
- *
- * @param <E>
+ *         
  */
 public class RandomValues<Integer> {
 
@@ -28,6 +27,12 @@ public class RandomValues<Integer> {
 		this.random = random;
 	}
 
+	/**
+	 * Adds elements coupled with their probability for successful roll
+	 * @param weight probability of a roll
+	 * @param result element to be added
+	 * @return instance of itself
+	 */
 	public RandomValues<Integer> add(double weight, Integer result) {
 		if (weight <= 0)
 			return this;
@@ -36,6 +41,9 @@ public class RandomValues<Integer> {
 		return this;
 	}
 
+	/**
+	 * Returns value, depending on it's chance to be rolled
+	 */
 	public Integer next() {
 		double value = random.nextDouble() * total;
 		return map.higherEntry(value).getValue();

@@ -1,82 +1,49 @@
-# Core Gaming Game Logic Developer - Tech Test 
+# Sky CoreGaming Test
 
-## The Test 
+This is my attempt at taking test provided by Sky Betting Java Server Side Engineer position.
 
-Purpose of this test is to create a simple game logic based on detailed specification and prove it's correct.
 
-We realise everyone has different levels of skill and experience when it comes to development, so we have split the test into 3 sections. If you do not have the knowledge to complete them all then that's ok, we just want to see how you approach the problem and get a feel for how you code. 
+# Contents
 
-As a hint have a look for 'Slot Machine' in the search engine of your choice. If you have any questions, please feel free to get in touch with your point of contact. We’ll get back to you as soon as possible. 
+This repository is separated into two parts:
+
+ - Server
+ - Client
+
+I have added basic JSON communication protocol under `http://localhost:8008/json`. 
+GSON was used for more comfortable work with JSON formatted responses and requests. On top of that, RestAssured was used to test `/json` endpoit due to how easy it is to test RESTful APIs with it.
 
 ### Requirements
- * Git
- * Java 8 (JDK 8).
- * Maven 3.5.4.
- * Ability to view *.xlsx files.
 
-## Review Criteria 
+-   Git
+-   Java 8 (JDK 8).
+-   Maven 3.5.4.
+-   Ability to view *.xlsx files.
 
-We will be looking for: 
+# How to use
 
-* Correct implementation of given tasks.
-* Modular/ Code organization. 
-* Generic code where appropriate. 
-* Clarity/ Self documenting, comments.
-* Unit tests usage.
-* Data correctness.
-* Code formatting.
-* Exceptions and error handling. 
-* Cool, exciting solutions/ideas.
+To run, simply import project as Maven project to your Eclipse environment. This will result in having 3 folders added:
 
-## Submission 
+ - Client
+ - Server
+ - Exercise
 
-Replace the contents of this README.md with: 
+### Client
+Client contains `src/test/java` and `src/main/java` packages, in which tests and main client are stored respectively.
 
-A covering note explaining the technology choices you have made. 
+To run tests, simply Right-click on CommunicationTest.java and Run as JUnit test. **Server has to be running beforehand**
 
-Any instructions required to run your solution. 
+### Server
+Server contains `src/test/java` with `com.cg.Constructors` and `com.cg.Server` packages. `Constructors` package contains `RandomValues.java` class, that has been found by me on StackOverflow. I found that implementation of weighted probability elegant and efficient. It has been reused because in real world, we have access to internet and we are able to look up solutions as such. Re-usability of code is one of the most important postulates and that is why I decided to reuse previously mentioned class. JAVADOC contains reference to thread on StackOverflow.
 
-Email as an attachment or a link the git bundled repository showing your commit history with all your commits on the master branch: 
+Additionally, server has two endpoints:
 
-```
-git bundle create <anything>.bundle --all --branches 
-```
+ - /serve
+ - /json
 
-### Setup and Details
- * Grab repository contents either via zip or git pull.
- * If working with compressed file, unpack file contents to folder of your choice.
- * In command line move to 'test' folder.
- * To build all modules execute:
-```
-mvn clean install -DskipTests
-```
- * To run a http web server execute: 
-```
-java -jar Server\target\Server-1.0.1-jar-with-dependencies.jar
-```
- * To run tests, in another command line window, execute: 
-```
-mvn test
-```
- * Watch the output for any test fail/ pass information.
- * All data tables can be found in 'profile.xlsx' file under titled tabs.
+Response type differs depending on which endpoint has been used.
 
-### Required Tasks 
+# Conclusion
+This project is not to be considered a fully deployed product, nor as full extend of my knowledge. It is to show my capabilities of backend development, familiarity with such subjects as JSON, unit testing, Restful services, and such. 
 
-* Find and familiarize yourself with Server, Client and unit tests source files. Hint: The 'test' is structured as a simple client - server application. The server is responsible for performing logic and generating responses to client requests. The client sends requests and contains a test suite which is used to validate given behaviours.
-* Have default project up and running. Both defined 'helloRequest*' tests must succeed. Hint: That should be done without any changes to the code by following 'Setup and Details' steps.
-* Add a 'table' client request and implement server response which will return randomly chosen 'Value' from 'BasicWeightTable' based on the percentage 'Chance'. Hint: For this task ignore data in '99% confidence level' column.
-* Implement tests that would run multiple 'table' requests and check aggregated responses against the expected occurences defined in 'BasicWeightTable'. Hint: How many times do you think 'Value' 3 will be retuned from the server? You can use '100k runs error margin' value to compare the results with 99% confidence. 
-* Improve communication protocol to use either Json or XML. Update your tests accordingly.
-
-#### Desirable Tasks 
-
-* Add a 'spin' request which will return a 3x3 matrix. Use 'Symbols' and 'Reels' tables. For every matrix draw one random position from each of the reels to stop at. 
-* For each result where middle row of your matrix satisfies one of the rules defined in 'WinRules' return the associated value.
-* Implement tests that would run multiple 'table' requests and check aggregated responses against the 'expected chance' defined in 'WinRules' table. Hint: use '100k runs error margin' value to compare the results with 99% confidence. 
-
-#### Optional Tasks 
-
-* Add 'Return To Player' value in percentage for both 'table' and 'spin'. Assuming each request cost '3.5'. We will not provide you with table to compare your results this time. Hint: To find the requested result compare total spent on initiating requests and total returned in responses. You can use 1% margin error for RTP comparison. 
-* For extra fun, can you change the server - client to work with WebSockets?
-
+Thanks for your time! :)
