@@ -1,12 +1,38 @@
 package com.cg.Client;
 
 import com.cg.Client.Client;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.equalTo;
 
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.Before;
 import org.junit.Test;
 
-public class CommunicationTest {
+import io.restassured.RestAssured;
+import io.restassured.specification.RequestSpecification;
+
+
+public class CommunicationTest extends RestAssured{
+	
+	RequestSpecification request = RestAssured.given();
+	
+	Gson GSON = new Gson();
+	
+	Type type = new TypeToken<Map<String, String>>() {}.getType();
+	Map<String, String> reqBody = new HashMap<String, String>();
+	
+	@Before
+	public void setup() {
+			
+	    RestAssured.baseURI = "http://localhost";
+	    RestAssured.port = 8008;
+	}
 
 	@Test
 	public void testHelloRequestCorrect() throws Exception {
@@ -47,6 +73,37 @@ public class CommunicationTest {
 				&& (float) occuranceOfOne / 1000 <= 30.3739f && (float) occuranceOfOne / 1000 >= 29.6261f
 				&& (float) occuranceOfTwo / 1000 <= 20.3263f && (float) occuranceOfTwo / 1000 >= 19.6737f
 				&& (float) occuranceOfThree / 1000 <= 10.2448f && (float) occuranceOfThree / 1000 >= 9.7552f);
+
+	}
+	
+	//JSON tests utilise RestAssured library for ease of use
+	@Test
+	public void testJonHelloRequest() throws Exception {
+		reqBody.put("request", "Hello");
+		
+		given()
+			.contentType("application/json")
+			.body(GSON.toJson(reqBody))
+		.when()
+			.post("/json")
+		.then()
+			.assertThat()
+			.body("response", equalTo("Hello stranger!"));
+
+	}
+	
+	@Test
+	public void testJonHelloWrongRequest() throws Exception {
+		reqBody.put("request", "hello");
+		
+		given()
+			.contentType("application/json")
+			.body(GSON.toJson(reqBody))
+		.when()
+			.post("/json")
+		.then()
+			.assertThat()
+			.body("response", equalTo("Wrong request"));
 
 	}
 }
